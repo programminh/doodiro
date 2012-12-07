@@ -2,7 +2,7 @@
 function db_connect() {
     $dbhost = "localhost";
     $dbuser = "root";
-    $dbpass = "root";
+    $dbpass = "mysql";
     $dbname = "doodiro";
 
     $mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
@@ -14,21 +14,22 @@ function db_connect() {
 
     return $mysqli;
 }
-    
+
 
 function check_credientials($email, $password) {
     $mysqli = db_connect();
 
-    $query = 'SELECT id, email, firstname, lastname, is_admin FROM users WHERE email=? and password=?';
-    
+    $query = 'SELECT count(*) FROM (select 1 from users WHERE email=? and password=?) as t';
+
     if ($stmt = $mysqli->prepare($query)) {
-    	$stmt->bind_param("ss", $email, sha1($password));
+        $password = sha1($password);
+    	$stmt->bind_param("ss", $email, $password);
         $stmt->execute();
-        $stmt->bind_result($id, $email, $firstname, $lastname, $is_admin);
-        $result = $stmt->fetch();
+        $stmt->bind_result($ok);
+        $stmt->fetch();
         $stmt->close();
         $mysqli->close();
-        return $result;
+        return $ok;
     }
     else {
     	die("Can't create statement: " . $mysqli->error);

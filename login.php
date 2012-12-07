@@ -1,10 +1,12 @@
 <?php
 require("db.php");
+require("utils.php");
 
 $invalid_login = false;
 if (!empty($_POST)) {
     if (check_credientials($_POST["email"], $_POST["password"])) {
-    	header("Location: http://doodiro.ift/index.html");
+        $location = create_url("index.html");
+    	header("Location: $location");
     }
     else {
     	$invalid_login = true;
