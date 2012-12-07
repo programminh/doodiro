@@ -4,7 +4,7 @@ require("db.php");
 $invalid_login = false;
 if (!empty($_POST)) {
     if (check_credientials($_POST["email"], $_POST["password"])) {
-    	header("Location: http://localhost/~vince/doodiro/index.html");
+    	header("Location: http://doodiro.ift/index.html");
     }
     else {
     	$invalid_login = true;
