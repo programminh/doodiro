@@ -1,22 +1,7 @@
 <?php
 require("db.php");
 require("utils.php");
-
-
-$invalid_login = false;
-if (!empty($_POST)) {
-    if ($info = check_credientials($_POST["email"], $_POST["password"])) {
-        session_start();
-        $_SESSION["info"] = $info;
-        $location = create_url("mainmenu.php");
-    	header("Location: $location");
-    }
-    else {
-    	$invalid_login = true;
-    }
-}
-
-
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -48,30 +33,8 @@ if (!empty($_POST)) {
 
             <!-- Main hero unit for a primary marketing message or call to action -->
             <div class="hero-unit">
-                <h1>Bienvenue à Doodiro!</h1>
+                <h1>Bienvenue <?php echo $_SESSION["info"]["firstname"] ?>!</h1>
                 <p>Doodiro est un logiciel permettant à plusieurs participants d'un événement de spécifier les périodes qui leur convient le mieux, et ainsi de permettre à l'organisateur de satisfaire le plus de gens possible.</p>
-                <?php if ($invalid_login): ?>
-                      <div class="alert alert-error">
-                           Courriel ou mot de passe incorrect.
-                      </div>
-                <?php endif ?>
-                <form method="post" action="login.php">
-                  <table class="table">
-                    <tr>
-                      <th>Courriel</th>
-                      <td><input type="text" name="email" /></td>
-                    </tr>
-                    <tr>
-                      <th>Mot de passe</th>
-                      <td><input type="password" name="password" /></td>
-                    </tr>
-                  </table>
-
-                  <input class="btn" type="submit" value="Connexion" />
-                </form>
-            </div>
-
-
             <footer>
                 <p>Vincent Foley &amp; Truong Pham</p>
             </footer>

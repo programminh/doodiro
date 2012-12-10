@@ -19,17 +19,23 @@ function db_connect() {
 function check_credientials($email, $password) {
     $mysqli = db_connect();
 
-    $query = 'SELECT count(*) FROM (select 1 from users WHERE email=? and password=?) as t';
+    $query = 'select id, firstname, lastname from users WHERE email=? and password=?';
 
     if ($stmt = $mysqli->prepare($query)) {
         $password = sha1($password);
     	$stmt->bind_param("ss", $email, $password);
         $stmt->execute();
-        $stmt->bind_result($ok);
-        $stmt->fetch();
+        $stmt->bind_result($id, $firstname, $lastname);
+        $ok = $stmt->fetch();
         $stmt->close();
         $mysqli->close();
-        return $ok;
+        if ($ok) {
+            return array("id" => $id, "email" => $email, "firstname" => $firstname,
+                         "lastname" => $lastname);
+        }
+        else {
+            return FALSE;
+        }
     }
     else {
     	die("Can't create statement: " . $mysqli->error);
