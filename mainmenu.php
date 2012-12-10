@@ -34,7 +34,11 @@ session_start();
             <!-- Main hero unit for a primary marketing message or call to action -->
             <div class="hero-unit">
                 <h1>Bienvenue <?php echo $_SESSION["info"]["firstname"] ?>!</h1>
-                <p>Doodiro est un logiciel permettant à plusieurs participants d'un événement de spécifier les périodes qui leur convient le mieux, et ainsi de permettre à l'organisateur de satisfaire le plus de gens possible.</p>
+
+                <ul>
+                <?php foreach (events_for_user($_SESSION["info"]["id"]) as $event): ?>
+                  <li><a href="<?php echo create_url("view_event.php?id={$event['id']}") ?>"><?php echo $event['name'] ?></li>
+                <?php endforeach ?>
             <footer>
                 <p>Vincent Foley &amp; Truong Pham</p>
             </footer>
