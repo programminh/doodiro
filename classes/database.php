@@ -2,7 +2,7 @@
 class Database {
 
     protected static function db_connect() {
-        require_once('config.php');
+        require('config.php');
 
         $mysqli = new mysqli($database['hostname'], $database['username'], $database['password'], $database['dbname']);
 

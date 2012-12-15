@@ -33,7 +33,7 @@ else {
                 padding-bottom: 40px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/main.css">
 
         <!--[if lt IE 9]>
@@ -75,14 +75,6 @@ else {
         </div>
 
         <?php include($content); ?>
-
-        <div class="container">
-            <hr>
-
-            <footer>
-                <p>&copy; Vincent Foley & Truong Pham</p>
-            </footer>
-        </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')</script>

@@ -1,12 +1,92 @@
-
-
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
 
+body {
+	background: black;
+}
+
+ul.sticky_notes, ul.sticky_notes li{  
+	list-style:none;  
+}  
+
+ul.sticky_notes{    
+	margin: 0;
+}  
+
+ul.sticky_notes li a {
+	text-decoration: none;
+	color: #000;
+	background: #ffc;
+	display: block;
+	height: 150px;
+	width: 195px;
+	padding: 10px;
+
+	-webkit-box-shadow: 5px 5px 7px rgba(190,190,190,.4);
+	box-shadow: 5px 5px 7px rgba(190,190,190,.4);
+}
+
+ul.sticky_notes li{  
+	margin: 20px 10px 40px 10px;  
+	float: left;  
+}
+
+ul.sticky_notes li p{  
+	font-family: "Reenie Beanie",arial,sans-serif;  
+ 	font-size: 180%;
+}  
+
+ul.sticky_notes li a {
+	-webkit-transform: rotate(-6deg);
+	-moz-transform: rotate(-6deg);
+	-o-transform: rotate(-6deg);
+	-ms-transform: rotate(-6deg);
+	transform: rotate(-6deg);
+}
+
+ul.sticky_notes li:nth-child(even) a {
+	-webkit-transform: rotate(4deg);
+	-moz-transform: rotate(4deg);
+	-o-transform: rotate(4deg);
+	-ms-transform: rotate(4deg);
+	transform: rotate(4deg);
+	position: relative;
+	top: 5px;
+}
+
+ul.sticky_notes li:nth-child(3n) a {
+	-webkit-transform: rotate(-3deg);
+	-moz-transform: rotate(-3deg);
+	-o-transform: rotate(-3deg);
+	-ms-transform: rotate(-3deg);
+	transform: rotate(-3deg);
+	position: relative;
+	top: -5px;
+}
+
+ul.sticky_notes li:nth-child(5n) a {
+	-webkit-transform: rotate(5deg);
+	-moz-transform: rotate(5deg);
+	-o-transform: rotate(5deg);
+	-ms-transform: rotate(5deg);
+	transform: rotate(5deg);
+	position: relative;
+	top: -10px;
+}
 
 
-
+ul.sticky_notes li a:hover,ul.sticky_notes li a:focus {
+	-webkit-box-shadow: 10px 10px 7px rgba(0,0,0,.7);
+	box-shadow: 10px 10px 7px rgba(0,0,0,.7);
+	-webkit-transform: scale(1.25);
+	-moz-transform: scale(1.25);
+	-o-transform: scale(1.25);
+	-ms-transform: scale(1.25);
+	transform: scale(1.25);
+	position: relative;
+	z-index: 5;
+}
 
 
 

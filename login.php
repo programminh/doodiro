@@ -31,7 +31,6 @@ if (!empty($_POST)) {
                 padding-bottom: 40px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="css/main.css">
 
         <!--[if lt IE 9]>

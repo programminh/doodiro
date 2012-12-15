@@ -1,18 +1,42 @@
 <div class="container">
 
-        <table class="table">
-        	<thead>
-	        	<tr>
-	        		<th><h1>Vos événements</h1></th>
-	        	</tr>
-        	</thead>
-        	<tbody>
-	            <?php foreach ($user->events() as $event): ?>
-	            <tr>
-	               	<td><a href="?p=view_event.php?id=<?php echo $event->id ?>"><?php echo $event->name ?></a></td>
-	            </tr>
-	            <?php endforeach ?>
-            </tbody>
-        </table>
+    <div class="row">
+        <div class="span12">
+            
+            <ul class="sticky_notes">
+                <?php foreach ($user->events() as $event): ?>
+                <li>
+                    <a href="#">
+                        <h3><?php echo $event->name ?></h3>
+                        <p>by <?php echo $event->organizer()->firstname ?> <?php echo $event->organizer()->lastname ?></p>
+                        <p>from <?php echo $event->start_time ?></p>
+                        <p>to <?php echo $event->end_time ?></p>
+                    </a>
+                </li>
+                <?php endforeach ?>
+                <?php foreach ($user->events() as $event): ?>
+                <li>
+                    <a href="#">
+                        <h3><?php echo $event->name ?></h3>
+                        <p>by <?php echo $event->organizer()->firstname ?> <?php echo $event->organizer()->lastname ?></p>
+                        <p>from <?php echo $event->start_time ?></p>
+                        <p>to <?php echo $event->end_time ?></p>
+                    </a>
+                </li>
+                <?php endforeach ?>
+                <?php foreach ($user->events() as $event): ?>
+                <li>
+                    <a href="#">
+                        <h3><?php echo $event->name ?></h3>
+                        <p>by <?php echo $event->organizer()->firstname ?> <?php echo $event->organizer()->lastname ?></p>
+                        <p>from <?php echo $event->start_time ?></p>
+                        <p>to <?php echo $event->end_time ?></p>
+                    </a>
+                </li>
+                <?php endforeach ?>
 
+            </ul>
+        
+        </div>
+    </div>
 </div> <!-- /container -->
