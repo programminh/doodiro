@@ -1,22 +1,19 @@
 <?php
-require("db.php");
-require("utils.php");
-
+require("classes/database.php");
 
 $invalid_login = false;
+
 if (!empty($_POST)) {
-    if ($info = check_credientials($_POST["email"], $_POST["password"])) {
+    if ($info = Database::check_credientials($_POST["email"], $_POST["password"])) {
         session_start();
         $_SESSION["info"] = $info;
-        $location = create_url("mainmenu.php");
-    	header("Location: $location");
+        $_SESSION["is_logged_in"] = true;
+    	header("Location: index.php");
     }
     else {
     	$invalid_login = true;
     }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +21,7 @@ if (!empty($_POST)) {
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <title>IFT3225 - Doodiro - Authentification</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -46,35 +43,37 @@ if (!empty($_POST)) {
     <body>
         <div class="container">
 
-            <!-- Main hero unit for a primary marketing message or call to action -->
-            <div class="hero-unit">
-                <h1>Bienvenue à Doodiro!</h1>
-                <p>Doodiro est un logiciel permettant à plusieurs participants d'un événement de spécifier les périodes qui leur convient le mieux, et ainsi de permettre à l'organisateur de satisfaire le plus de gens possible.</p>
-                <?php if ($invalid_login): ?>
-                      <div class="alert alert-error">
-                           Courriel ou mot de passe incorrect.
-                      </div>
-                <?php endif ?>
-                <form method="post" action="login.php">
-                  <table class="table">
-                    <tr>
-                      <th>Courriel</th>
-                      <td><input type="text" name="email" /></td>
-                    </tr>
-                    <tr>
-                      <th>Mot de passe</th>
-                      <td><input type="password" name="password" /></td>
-                    </tr>
-                  </table>
+            <div class="row">
+                <div class="span6 offset3 well">
+                    <h1>Bienvenue à Doodiro!</h1>
+                    <p>Doodiro est un logiciel permettant à plusieurs participants d'un événement de spécifier les périodes qui leur convient le mieux, et ainsi de permettre à l'organisateur de satisfaire le plus de gens possible.</p>
+                    <?php if ($invalid_login): ?>
+                          <div class="alert alert-error">
+                               Courriel ou mot de passe incorrect.
+                          </div>
+                    <?php endif ?>
 
-                  <input class="btn" type="submit" value="Connexion" />
-                </form>
+                    <form method="post" action="login.php">
+                      <fieldset>
+                        <legend>Authentification</legend>
+                        <label>Courriel</label>
+                        <input type="text" name="email" value="<?php echo ($_POST['email'] ? $_POST['email'] : '') ?>" />
+                        <label>Mot de passe</label>
+                        <input type="password" name="password" />
+                      </fieldset>
+
+                      <input class="btn btn-primary" type="submit" value="Connexion" />
+                    </form>
+                </div>
+
+                <div class="span6 offset3">
+                    <footer>
+                        <p>&copy; Vincent Foley &amp; Truong Pham</p>
+                    </footer>
+                </div>
             </div>
-
-
-            <footer>
-                <p>Vincent Foley &amp; Truong Pham</p>
-            </footer>
+            
+            
 
         </div> <!-- /container -->
 
