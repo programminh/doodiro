@@ -7,9 +7,9 @@
 	        	</tr>
         	</thead>
         	<tbody>
-	            <?php foreach (Event::find_for_user($info['id']) as $event): ?>
+	            <?php foreach ($user->events() as $event): ?>
 	            <tr>
-	               	<td><a href="?p=view_event.php?id=<?php echo $event['id'] ?>"><?php echo $event['name'] ?></a></td>
+	               	<td><a href="?p=view_event.php?id=<?php echo $event->id ?>"><?php echo $event->name ?></a></td>
 	            </tr>
 	            <?php endforeach ?>
             </tbody>

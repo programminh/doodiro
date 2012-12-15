@@ -1,16 +1,15 @@
 <?php 
-session_start();
+require('bootstrap.php');
 
+// Redirect to login if not logged in
 if (! $_SESSION['is_logged_in']) {
     header('Location: login.php');
 }
 
-// Loading classes
-require('classes/database.php');
-require('classes/event.php');
+// Fetching user's info from the session
+$user = $_SESSION['user'];
 
-$info = $_SESSION['info'];
-
+// Getting page content
 if(! isset($_GET['p'])) {
     $content = 'content/event_list.php';
 }
@@ -63,7 +62,7 @@ else {
                         <ul class="nav pull-right">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <?php echo $info['firstname'].' '.$info['lastname'] ?> <b class="caret"></b>
+                                    <?php echo $user->firstname.' '.$user->lastname ?> <b class="caret"></b>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="logout.php">Déconnexion</a></li>

@@ -1,12 +1,11 @@
 <?php
-require("classes/database.php");
+require('bootstrap.php');
 
 $invalid_login = false;
 
 if (!empty($_POST)) {
-    if ($info = Database::check_credientials($_POST["email"], $_POST["password"])) {
-        session_start();
-        $_SESSION["info"] = $info;
+    if ($user = User::auth($_POST["email"], $_POST["password"])) {
+        $_SESSION["user"] = $user;
         $_SESSION["is_logged_in"] = true;
     	header("Location: index.php");
     }
