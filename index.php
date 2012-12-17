@@ -11,7 +11,7 @@ $user = $_SESSION['user'];
 
 // Getting page content
 if(! isset($_GET['p'])) {
-    $content = 'content/event_list.php';
+    $content = 'content/list_event.php';
 }
 else {
     $content = 'content/'.$_GET['p'].'.php';
@@ -43,32 +43,6 @@ else {
     </head>
     <body>
 
-        <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
-
-        <!-- <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="brand" href="index.php">Doodiro</a>
-                    <div class="nav-collapse">
-                        <ul class="nav">
-                            <li><a href="index.php">Accueil</a></li>
-                            <li><a href="">Créer un événement</a></li>
-                        </ul>
-                        <ul class="nav pull-right">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <?php echo $user->firstname.' '.$user->lastname ?> <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="logout.php">Déconnexion</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
         <div class="container" id="top-menu">
             <div class="row">
                 <div class="span6">
@@ -90,13 +64,14 @@ else {
             </div>
         </div>
 
-        <?php include($content); ?>
-
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
 
         <script src="js/vendor/bootstrap.min.js"></script>
 
         <script src="js/main.js"></script>
+
+        <?php include($content); ?>
+
     </body>
 </html>

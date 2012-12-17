@@ -19,6 +19,32 @@ class User extends Database {
 		$this->is_admin = $array['is_admin'];
 	}
 
+    public static function find_all_names() {
+        $mysqli = self::db_connect();
+
+        $query = 'SELECT id, firstname, lastname from users';
+
+        if($stmt = $mysqli->prepare($query)) {
+            $stmt->bind_param('s', $user_id);
+            $stmt->execute();
+            $stmt->bind_result($id, $firstname, $lastname);
+            while($stmt->fetch()) {
+                $user = new stdClass();
+                $user->id = $id;
+                $user->fullname = $firstname.' '.$lastname;
+
+                $users[] = $user;
+            }
+
+            return $users;
+
+        }
+        else {
+            die("Can't create statement: ".$mysqli->error);
+        }
+
+    }
+
 	/**
 	 * Authenticates a user
 	 * @param  string $email    User's email
