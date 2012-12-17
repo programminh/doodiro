@@ -45,16 +45,11 @@ else {
 
         <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
 
-        <div class="navbar navbar-inverse navbar-fixed-top">
+        <!-- <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
                     <a class="brand" href="index.php">Doodiro</a>
-                    <div class="nav-collapse collapse">
+                    <div class="nav-collapse">
                         <ul class="nav">
                             <li><a href="index.php">Accueil</a></li>
                             <li><a href="">Créer un événement</a></li>
@@ -69,7 +64,28 @@ else {
                                 </ul>
                             </li>
                         </ul>
-                    </div><!--/.nav-collapse -->
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="container" id="top-menu">
+            <div class="row">
+                <div class="span6">
+                    <div class="btn-group">
+                        <a class="btn" href="index.php">
+                            Doodiro
+                        </a>
+                        <a class="btn btn-success" href="?p=new_event">
+                            Nouveau
+                        </a>
+                    </div>
+                </div>
+                <div class="span6">
+                    <h5 class="pull-right">
+                        <?php echo $user->firstname ?> <?php echo $user->lastname ?>
+                        (<a href="logout.php">Déconnexion</a>)
+                    </h5>
                 </div>
             </div>
         </div>
