@@ -1,73 +1,176 @@
-create table users (
-       id int(11) not null auto_increment,
-       email varchar(255) not null,    -- Email is the login
-       password varchar(255) not null, -- Should be hashed.
-       firstname varchar(255),
-       lastname varchar(255),
-       is_admin boolean not null default false,
-       unique (email),
-       primary key (id)
-);
+-- phpMyAdmin SQL Dump
+-- version 3.5.3
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Dec 17, 2012 at 02:57 PM
+-- Server version: 5.5.27
+-- PHP Version: 5.4.7
 
-create table events (
-       id int(11) not null auto_increment,
-       organizer int(11) not null,
-       name varchar(100) not null,
-       start_time time not null,
-       end_time time not null,
-       type enum('public', 'private') not null,
-       primary key (id),
-       foreign key (organizer) references users(id)
-);
-
-create table invitations (
-       user_id int(11) not null,
-       event_id int(11) not null,
-       primary key (user_id, event_id),
-       foreign key (user_id) references users(id),
-       foreign key (event_id) references events(id)
-);
-
--- The possible dates for an event.
-create table event_dates (
-       id int(11) not null auto_increment,
-       event_id int(11),
-       date date,
-       primary key (id),
-       foreign key (event_id) references events(id)
-);
-
--- Mapping users with events and time slots.
-create table reservations (
-       id int(11) not null auto_increment,
-       user_id int(11) not null,
-       event_date_id int(11) not null,
-       primary key (id),
-       foreign key (user_id) references users(id),
-       foreign key (event_date_id) references event_dates(id)
-);
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
--- Some initial data
-insert into users (id, email, password, firstname, lastname, is_admin)
-   values(1, "foleybov@iro.umontreal.ca", sha1("foleybov"), "Vincent", "Foley-Bouron", true),
-         (2, "phamlemi@iro.umontreal.ca", sha1("phamlemi"), "Truong", "Pham", false),
-         (3, "vaudrypl@iro.umontreal.ca", sha1("vaudrypl"), "Pierre-Luc", "Vaudry", false),
-         (4, "lapalme@iro.umontreal.ca", sha1("lapalme"), "Guy", "Lapalme", false);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
 
-insert into events(id, organizer, name, start_time, end_time, type)
-   values(1, 1, "Faire TP3", "8:00:00", "22:00:00", 'public'),
-         (2, 4, "Examen final", "8:00:00", "15:00:00", 'private');
+--
+-- Database: `doodiro`
+--
 
-insert into invitations(user_id, event_id)
-   values(1, 1), (2, 1),
-         (1, 2), (2, 2), (3, 2), (4, 2);
+-- --------------------------------------------------------
 
-insert into event_dates(id, event_id, date)
-   values(1, 1, "2012-12-06"),
-         (2, 1, "2012-12-07"),
-         (3, 1, "2012-12-08"),
-         (4, 2, "2013-01-13"),
-         (5, 2, "2013-01-14"),
-         (6, 2, "2013-01-15"),
-         (7, 2, "2013-01-16");
+--
+-- Table structure for table `events`
+--
+
+CREATE TABLE IF NOT EXISTS `events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `organizer` int(11) NOT NULL,
+  `name` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `description` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `type` enum('public','private') CHARACTER SET latin1 NOT NULL,
+  `duration` int(2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `organizer` (`organizer`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `organizer`, `name`, `description`, `type`, `duration`) VALUES
+(1, 1, 'Faire TP3', 'Compléter le Doodiro', 'public', 0),
+(2, 4, 'Examen final', 'Test final pour le cours IFT3225', 'private', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `event_dates`
+--
+
+CREATE TABLE IF NOT EXISTS `event_dates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_id` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `event_id` (`event_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `event_dates`
+--
+
+INSERT INTO `event_dates` (`id`, `event_id`, `date`, `start_time`, `end_time`) VALUES
+(1, 1, '2012-12-06', '08:00:00', '22:00:00'),
+(2, 1, '2012-12-07', '08:00:00', '22:00:00'),
+(3, 1, '2012-12-08', '08:00:00', '22:00:00'),
+(4, 2, '2013-01-13', '08:00:00', '15:00:00'),
+(5, 2, '2013-01-14', '08:00:00', '15:00:00'),
+(6, 2, '2013-01-15', '08:00:00', '15:00:00'),
+(7, 2, '2013-01-16', '08:00:00', '15:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invitations`
+--
+
+CREATE TABLE IF NOT EXISTS `invitations` (
+  `user_id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`event_id`),
+  KEY `event_id` (`event_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `invitations`
+--
+
+INSERT INTO `invitations` (`user_id`, `event_id`) VALUES
+(1, 1),
+(2, 1),
+(1, 2),
+(2, 2),
+(3, 2),
+(4, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reservations`
+--
+
+CREATE TABLE IF NOT EXISTS `reservations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `event_date_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `event_date_id` (`event_date_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `password` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `firstname` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `lastname` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `password`, `firstname`, `lastname`, `is_admin`) VALUES
+(1, 'foleybov@iro.umontreal.ca', '766c450ad1bf2ba22512def225bfc61400f08d5a', 'Vincent', 'Foley-Bouron', 1),
+(2, 'phamlemi@iro.umontreal.ca', 'fbcdd71afc9b3b3f4f69f280863f10da8684b480', 'Truong', 'Pham', 0),
+(3, 'vaudrypl@iro.umontreal.ca', '6764366a0308eaf1590c74f2cd58f408f4fb0009', 'Pierre-Luc', 'Vaudry', 0),
+(4, 'lapalme@iro.umontreal.ca', 'ac92e42ee79150dab054951bc737240d96300c24', 'Guy', 'Lapalme', 0);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `events`
+--
+ALTER TABLE `events`
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`organizer`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `event_dates`
+--
+ALTER TABLE `event_dates`
+  ADD CONSTRAINT `event_dates_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`);
+
+--
+-- Constraints for table `invitations`
+--
+ALTER TABLE `invitations`
+  ADD CONSTRAINT `invitations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `invitations_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`);
+
+--
+-- Constraints for table `reservations`
+--
+ALTER TABLE `reservations`
+  ADD CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`event_date_id`) REFERENCES `event_dates` (`id`);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

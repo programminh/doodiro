@@ -8,8 +8,7 @@
                 <li>
                     <a href="#">
                         <h3><?php echo $event->name ?></h3>
-                        <p>from <?php echo $event->start_time ?></p>
-                        <p>to <?php echo $event->end_time ?></p>
+                        <p><?php echo $event->description ?></p>
                         <p>- <?php echo $event->organizer()->firstname ?> <?php echo $event->organizer()->lastname ?></p>
                     </a>
                 </li>
@@ -19,8 +18,7 @@
                 <li>
                     <a href="#">
                         <h3><?php echo $event->name ?></h3>
-                        <p>from <?php echo $event->start_time ?></p>
-                        <p>to <?php echo $event->end_time ?></p>
+                        <p><?php echo $event->description ?></p>
                         <p>- <?php echo $event->organizer()->firstname ?> <?php echo $event->organizer()->lastname ?></p>
                     </a>
                 </li>

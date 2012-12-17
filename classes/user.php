@@ -104,19 +104,19 @@ class User extends Database {
     	$events = array();
         $mysqli = self::db_connect();
 
-        $query = "select e.id, e.organizer, e.name, e.start_time, e.end_time, e.type from events e, invitations i where e.id = i.event_id and i.user_id = ? order by name";
+        $query = "select e.id, e.organizer, e.name, e.description, e.type, e.duration from events e, invitations i where e.id = i.event_id and i.user_id = ? order by name";
         if ($stmt = $mysqli->prepare($query)) {
             $stmt->bind_param("i", $this->id);
-            $stmt->bind_result($event_id, $event_organizer, $event_name, $event_start_time, $event_end_time, $event_type);
+            $stmt->bind_result($event_id, $event_organizer, $event_name, $event_description, $event_type, $event_duration);
             $stmt->execute();
             while ($stmt->fetch()) {
                 $events[] = new Event(array(
                 	'id' => $event_id, 
                 	'organizer' => $event_organizer,
                 	'name' => $event_name,
-                	'start_time' => $event_start_time,
-                	'end_time' => $event_end_time,
-                	'type' => $event_type
+                    'description' => $event_description,
+                	'type' => $event_type,
+                    'duration' => $event_duration
                 	));
             }
             $stmt->close();

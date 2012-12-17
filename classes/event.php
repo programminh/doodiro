@@ -4,9 +4,9 @@ class Event extends Database {
 	public $id;
 	public $organizer;
 	public $name;
-	public $start_time;
-	public $end_time;
+	public $description;
 	public $type;
+	public $duration;
 
 	/**
 	 * Constructor
@@ -16,9 +16,9 @@ class Event extends Database {
 		$this->id = $array['id'];
 		$this->organizer = $array['organizer'];
 		$this->name = $array['name'];
-		$this->start_time = $array['start_time'];
-		$this->end_time = $array['end_time'];
+		$this->description = $array['description'];
 		$this->type = $array['type'];
+		$this->duration = $array['duration'];
 	}
 
 	/**
