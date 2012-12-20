@@ -56,6 +56,44 @@ class Event extends Database {
         }
     }
 
+    public function userIsInvited($user_id) {
+        $mysqli = self::db_connect();
+        $query = 'select 1 from invitations where event_id = ? and user_id = ?';
+        if ($stmt = $mysqli->prepare($query)) {
+            $stmt->bind_param("ii", $this->id, $user_id);
+            $stmt->execute();
+
+            $isInvited = $stmt->fetch();
+            $stmt->close();
+            $mysqli->close();
+            return $isInvited;
+        }
+        else {
+            return FALSE;
+        }
+    }
+
+    public function getInvitees() {
+        $mysqli = self::db_connect();
+        $query = "select i.user_id, concat(u.firstname, ' ', u.lastname) fullname from invitations i, users u where event_id = ? and u.id = i.user_id";
+        if ($stmt = $mysqli->prepare($query)) {
+            $stmt->bind_param("i", $this->id);
+            $stmt->bind_result($user_id, $fullname);
+            $stmt->execute();
+
+            $invitees = array();
+            while ($stmt->fetch()) {
+                $invitees[] = array($user_id, $fullname);
+            }
+            $stmt->close();
+            $mysqli->close();
+            return $invitees;
+        }
+        else {
+            return FALSE;
+        }   
+    }
+
     public function dates() {
         $mysqli = self::db_connect();
         $query = 'select date, hour(start_time), hour(end_time) from event_dates where event_id = ? order by date';

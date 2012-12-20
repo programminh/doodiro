@@ -19,6 +19,10 @@ class User extends Database {
 		$this->is_admin = $array['is_admin'];
 	}
 
+    public function fullname() {
+        return $this->firstname . " " . $this->lastname;
+    }
+
     public static function find_all_names() {
         $mysqli = self::db_connect();
 
