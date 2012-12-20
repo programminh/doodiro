@@ -6,13 +6,13 @@
 	margin-bottom: 40px;
 }
 
-ul.sticky_notes, ul.sticky_notes li{  
-	list-style:none;  
-}  
+ul.sticky_notes, ul.sticky_notes li{
+	list-style:none;
+}
 
-ul.sticky_notes{    
+ul.sticky_notes{
 	margin: 0;
-}  
+}
 
 ul.sticky_notes li a {
 	text-decoration: none;
@@ -34,15 +34,15 @@ ul.sticky_notes li a {
 }
 
 
-ul.sticky_notes li{  
-	margin: 20px 10px 40px 10px;  
-	float: left;  
+ul.sticky_notes li{
+	margin: 20px 10px 40px 10px;
+	float: left;
 }
 
-ul.sticky_notes li p{  
-	font-family: "Reenie Beanie",arial,sans-serif;  
+ul.sticky_notes li p{
+	font-family: "Reenie Beanie",arial,sans-serif;
  	font-size: 180%;
-}  
+}
 
 ul.sticky_notes li a {
 	-webkit-transform: rotate(-6deg);
@@ -103,12 +103,19 @@ ul.sticky_notes li a:hover,ul.sticky_notes li a:focus {
 }
 
 
+.no-reservation {
+    background-color: #ddd;
+}
 
+.going {
+    background: url(../img/tick.png) no-repeat center #8f8;
 
+}
 
+.not-going {
+    background: url(../img/cross.png) no-repeat center #f88;
+}
 
-
-
-
-
-
+.not-sure {
+    background-color: #88f;
+}

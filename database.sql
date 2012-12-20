@@ -109,10 +109,20 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `event_date_id` int(11) NOT NULL,
+  `reservation_time` time NOT NULL,
+  `can_go` boolean NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `event_date_id` (`event_date_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+INSERT INTO `reservations` (`id`, `user_id`, `event_date_id`, `reservation_time`, `can_go`) VALUES
+(1, 1, 1, "10:00:00", true),
+(2, 1, 1, "11:00:00", true),
+(3, 1, 2, "13:00:00", false),
+(4, 1, 2, "14:00:00", false),
+(5, 1, 7, "8:00:00", true),
+(6, 2, 1, "10:00:00", false);
 
 -- --------------------------------------------------------
 
