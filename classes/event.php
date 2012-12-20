@@ -3,6 +3,7 @@
 class Event extends Database {
 	public $id;
 	public $organizer;
+	public $organizer_name;
 	public $name;
 	public $description;
 	public $type;
@@ -15,6 +16,7 @@ class Event extends Database {
 	public function __construct($array) {
 		$this->id = $array['id'];
 		$this->organizer = $array['organizer'];
+		$this->organizer_name = $array['organizer_name'];
 		$this->name = $array['name'];
 		$this->description = $array['description'];
 		$this->type = $array['type'];
@@ -31,10 +33,10 @@ class Event extends Database {
 
     public static function find($id) {
         $mysqli = self::db_connect();
-        $query = 'select organizer, name, description, type, duration from events where id = ?';
+        $query = 'select e.organizer, concat(u.firstname, " ", u.lastname) organizer_name, e.name, e.description, e.type, e.duration from events e, users u where e.id = ? and u.id = e.organizer';
         if ($stmt = $mysqli->prepare($query)) {
             $stmt->bind_param("i", $id);
-            $stmt->bind_result($organizer, $name, $description, $type, $duration);
+            $stmt->bind_result($organizer, $organizer_name, $name, $description, $type, $duration);
             $stmt->execute();
             $ok = $stmt->fetch();
             $stmt->close();
@@ -44,6 +46,7 @@ class Event extends Database {
                 return new Event(array(
                     "id" => $id,
                     "organizer" => $organizer,
+                    "organizer_name" => $organizer_name,
                     "name" => $name,
                     "description" => $description,
                     "type" => $type,
