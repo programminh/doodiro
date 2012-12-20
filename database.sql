@@ -29,9 +29,9 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `organizer` int(11) NOT NULL,
-  `name` varchar(100) CHARACTER SET latin1 NOT NULL,
-  `description` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `type` enum('public','private') CHARACTER SET latin1 NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `type` enum('public','private') NOT NULL,
   `duration` int(2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `organizer` (`organizer`)
@@ -132,10 +132,10 @@ INSERT INTO `reservations` (`id`, `user_id`, `event_date_id`, `reservation_time`
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `password` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `firstname` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
-  `lastname` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `firstname` varchar(255) DEFAULT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
