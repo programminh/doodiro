@@ -102,18 +102,20 @@ ul.sticky_notes li a:hover,ul.sticky_notes li a:focus {
 	margin-right: 20px;
 }
 
-
+.changeable {
+	text-align: center;
+}
 .no-reservation {
     background-color: #ddd;
 }
 
 .going {
-    background: url(../img/tick.png) no-repeat center #8f8;
+    background: #8f8;
 
 }
 
 .not-going {
-    background: url(../img/cross.png) no-repeat center #f88;
+    background: #f88;
 }
 
 .not-sure {
