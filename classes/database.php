@@ -10,7 +10,7 @@ class Database {
             die();
         }
 
-
+        $mysqli->query("SET NAMES utf8");  
 
         return $mysqli;
     }

@@ -55,7 +55,7 @@ if (!empty($_POST)) {
                       <fieldset>
                         <legend>Authentification</legend>
                         <label>Courriel</label>
-                        <input type="text" name="email" value="<?php echo ($_POST['email'] ? $_POST['email'] : '') ?>" />
+                        <input type="text" name="email" value="<?php echo (array_key_exists('email', $_POST) ? $_POST['email'] : '') ?>" />
                         <label>Mot de passe</label>
                         <input type="password" name="password" />
                       </fieldset>
