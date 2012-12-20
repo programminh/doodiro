@@ -55,6 +55,7 @@ $c = count($event_dates);
             </table>
 
         </form>
+    </div>
 </div>
 
 <script>

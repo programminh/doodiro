@@ -50,7 +50,7 @@ $all_users = json_encode(User::find_all_names());
 					<label for="invitee" class="control-label">Invités</label>
 					<div id="invitee-group" class="controls">
 						<div class="input-append">
-							<input name="invitee" type="text" placeholder="Nom de l'invité" id="invitee">
+							<input name="invitee" type="text" placeholder="Nom de l'invité" id="invitee" autocomplete="off">
 							<a id="add_invitee" class="btn"><i class="icon-plus"></i></a>
 						</div>
 					</div>
@@ -65,32 +65,53 @@ $all_users = json_encode(User::find_all_names());
 <script type="text/javascript">
 	$(function() {
 		var users = <?php echo $all_users ?>;
-		var usersNames = [];
+		var usersName = [];
+		var inviteesName = [];
 		var invitees = [];
 		var inviteeDiv = $('#invitee-group');
 		var addInviteeButton = $('#add_invitee');
 		var inviteeInput = $('#invitee');
 
-		// Load all the names into an array for the type ahead
+
+		// Load all the names into an array for the typeahead
 		for(var key in users) {
 			if(users.hasOwnProperty(key)) {
-				usersNames.push(users[key].fullname);
+				usersName.push(users[key].fullname);
 			}
 		}
 
+
 		// Intializes type ahead
 		$('#invitee').typeahead({
-			source: usersNames
+			source: usersName
 		});
 
 		// Add an invitee
 		addInviteeButton.click(function(){
-			if(! inviteeInput.val()) {
-				return;
-			}
+			if(! inviteeInput.val()) return alert('Le nom de l\'invité ne peut être vide');
 
-			inviteeDiv.prepend('<div class="alert alert-info alert-invitee">'+inviteeInput.val()+'<a class="close">&times;</a></div>')
+			if($.inArray(inviteeInput.val(), usersName) === -1) return alert(inviteeInput.val() + ' n\'existe pas');
+			
+			if($.inArray(inviteeInput.val(), inviteesName) !== -1) return alert(inviteeInput.val() + ' est déjà invité(e)');
+
+			
 		});
+
+		function addInvitee(fullname) {
+			inviteesName.push(fullname);
+			inviteeDiv.prepend('<div class="alert alert-info alert-invitee">'+inviteeInput.val()+'<a class="close">&times;</a></div>');
+
+			// Loop through the users array and push the user object into the invitees object.
+			for(var key in users) {
+				if(users.hasOwnProperty(key)) {
+					if (users[key].fullname == fullname) {
+						invitees.push(users[key]);
+						break;
+					}
+				}
+			}
+		}
+
 
 	});
 </script>
