@@ -54,7 +54,7 @@ $all_users = json_encode(User::find_all_names());
 							<a id="add_invitee" class="btn"><i class="icon-plus"></i></a>
 						</div>
 					</div>
-				</div><!-- End Title -->
+				</div><!-- End Invitees -->
 
 			</form>
 
@@ -67,9 +67,9 @@ $all_users = json_encode(User::find_all_names());
 		var users = <?php echo $all_users ?>;
 		var usersNames = [];
 		var invitees = [];
-		var invitee_group = $('#invitee-group');
-		var add_invitee = $('#add_invitee');
-		var invitee_name = $('#invitee');
+		var inviteeDiv = $('#invitee-group');
+		var addInviteeButton = $('#add_invitee');
+		var inviteeInput = $('#invitee');
 
 		// Load all the names into an array for the type ahead
 		for(var key in users) {
@@ -83,18 +83,14 @@ $all_users = json_encode(User::find_all_names());
 			source: usersNames
 		});
 
-
-
 		// Add an invitee
-		add_invitee.click(function(){
-			if(! invitee_name.val()) {
+		addInviteeButton.click(function(){
+			if(! inviteeInput.val()) {
 				return;
 			}
 
-			invitee_group.prepend('<div class="alert alert-info alert-invitee">'+invitee_name.val()+'<a class="close">&times;</a></div>')
+			inviteeDiv.prepend('<div class="alert alert-info alert-invitee">'+inviteeInput.val()+'<a class="close">&times;</a></div>')
 		});
 
 	});
-
-
 </script>
