@@ -59,8 +59,8 @@ $c = count($event_dates);
 
 
 <div class="container">
-    <h1><?php echo $event->name ?></h1>
 	<div class="row">
+        <h1><?php echo $event->name ?></h1>
         <form id="new_event_form" class="form-horizontal" method="post" action="">
 	        <legend>Mes disponibilités</legend>
 
@@ -89,12 +89,12 @@ $c = count($event_dates);
             </table>
             <input type="submit" class="btn" value="Enregistrer" />
         </form>
-<<<<<<< HEAD
-=======
 
-
+        <h1>Autres invités</h1>
         <?php foreach ($others_reservations as $invitee_name => $reservations): ?>
-        <legend><?php echo $invitee_name; ?></legend>
+        <?php if ($event->type === 'public'): ?>
+        <legend><?php echo $invitee_name ?></legend>
+        <?php endif ?>
 
         <table border="1">
             <tr>
@@ -120,33 +120,30 @@ $c = count($event_dates);
             </tr>
         </table>
         <?php endforeach ?>
->>>>>>> a0342d2f456d498892f526de6deb115b1d896929
     </div>
 </div>
 
 <script>
 $(function () {
-    var classes = ["going", "not-going", "not-sure"];
-    var icons = ["icon-ok-sign", "icon-remove-sign", ""];
-    var values = ["1", "0", "-1"];
+    var properties = {
+        "0": ["not-sure", "", "-1"],
+        "1": ["not-going", "icon-remove-sign", "0"],
+        "-1": ["going", "icon-ok-sign", "1"],
+    };
     $("#my-availabilities .changeable").click(function () {
-        var that = $(this);
-        var currentClass = that.prop("class").split(" ")[1]; // Yuck.
-        var nextClass = classes[(classes.indexOf(currentClass) + 1) % 3];
-        that.removeClass(currentClass);
-        that.addClass(nextClass);
-
-        var icon = that.find("i");
+        var td = $(this);
+        var currentClass = td.prop("class").split(" ")[1]; // Yuck.
+        var icon = td.find("i");
         var currentIcon = icon.prop("class");
-        var nextIcon = icons[(icons.indexOf(currentIcon) + 1) % 3];
-        icon.removeClass(currentIcon);
-        icon.addClass(nextIcon);
-
-        var hidden = that.find("input");
+        var hidden = td.find("input");
         var currentValue = hidden.prop("value");
-        var nextValue = values[(values.indexOf(currentValue) + 1) % 3];
-        hidden.prop("value", nextValue);
 
+        var nextProperties = properties[currentValue];
+        td.removeClass(currentClass);
+        icon.removeClass(currentIcon);
+        td.addClass(nextProperties[0]);
+        icon.addClass(nextProperties[1]);
+        hidden.prop("value", nextProperties[2]);
     });
 });
 </script>
