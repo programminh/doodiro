@@ -34,6 +34,7 @@ else {
             }
         </style>
         <link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
         <link rel="stylesheet" href="css/main.css">
 
         <!--[if lt IE 9]>
@@ -70,6 +71,8 @@ else {
         <script src="js/vendor/bootstrap.min.js"></script>
 
         <script src="js/main.js"></script>
+
+        <script src="js/vendor/jquery-ui-1.9.2.custom.js"></script>
 
         <?php include($content); ?>
 

@@ -89,10 +89,6 @@ $c = count($event_dates);
             </table>
             <input type="submit" class="btn" value="Enregistrer" />
         </form>
-<<<<<<< HEAD
-=======
-
-
         <?php foreach ($others_reservations as $invitee_name => $reservations): ?>
         <legend><?php echo $invitee_name; ?></legend>
 
@@ -120,7 +116,6 @@ $c = count($event_dates);
             </tr>
         </table>
         <?php endforeach ?>
->>>>>>> a0342d2f456d498892f526de6deb115b1d896929
     </div>
 </div>
 
