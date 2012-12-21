@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `firstname`, `lastname`, `is_admin`) VALUES
-(1, 'foleybov@iro.umontreal.ca', '766c450ad1bf2ba22512def225bfc61400f08d5a', 'Vincent', 'Foley-Bouron', 1),
+(1, 'foleybov@iro.umontreal.ca', '766c450ad1bf2ba22512def225bfc61400f08d5a', 'Vincent', 'Foley-Bourgon', 1),
 (2, 'phamlemi@iro.umontreal.ca', 'fbcdd71afc9b3b3f4f69f280863f10da8684b480', 'Truong', 'Pham', 0),
 (3, 'vaudrypl@iro.umontreal.ca', '6764366a0308eaf1590c74f2cd58f408f4fb0009', 'Pierre-Luc', 'Vaudry', 0),
 (4, 'lapalme@iro.umontreal.ca', 'ac92e42ee79150dab054951bc737240d96300c24', 'Guy', 'Lapalme', 0);

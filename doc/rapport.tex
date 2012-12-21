@@ -46,11 +46,36 @@ fonctionnalités:
   usagers.  Il peut également supprimer des événements.
 \end{itemize}
 
+\subsection{Utilisateurs}
+
+Afin de tester les différentes fonctionnalités de Doodiro, nous
+fournissons 4 comptes:
+
+
+\begin{tabular}{|c | c | c |}
+  \hline
+  Email & Mot de passe & Administrateur? \\
+  \hline
+  foleybov@iro.umontreal.ca & foleybov & $\checkmark$ \\
+  phamlemi@iro.umontreal.ca & phamlemi & ~ \\
+  vaudrypl@iro.umontreal.ca & vaudrypl & ~ \\
+  lapalme@iro.umontreal.ca & lapalme & ~ \\
+  \hline
+\end{tabular}
+
+\subsection{Validation}
+
+La validation dans les différents formulaires est faites via
+JavaScript afin d'offrir aux usagers une expérience d'utilisation plus
+prompte. Si on devait supporter des navigateurs plus anciens, ou si on
+désirait avoir une protection supplémentaire, il faudrait dupliquer la
+logique de validation en PHP.
+
 
 \section{Choix technologies}
 
 Malgré que le choix de PHP et MySQL soient imposés, nous avions une
-certaines libertés des choix technologiques.  Voici un résumé de ces
+certaine liberté des choix technologiques. Voici un résumé de ces
 choix.
 
 \subsection{Bootstrap}
@@ -59,7 +84,8 @@ La compagnie Twitter a créé un ``framework'' CSS appelé Bootstrap qui
 permet de rapidement, et sans maux de têtes, créer de belles
 interfaces web.  Le CSS est écrit de façon portable, ce qui nous a
 évité les problèmes habituels de tester sur Firefox, Chrome, Safari,
-Internet Explorer, etc.
+Internet Explorer, etc.  De plus, ce framework donne une interface
+connue à notre application que beaucoup d'utilisateurs apprécieront.
 
 \subsection{PHP + MySQL}
 
@@ -76,9 +102,10 @@ section ``Problèmes et solution'' que cette approche se termina en
 
 Bien que MySQL offre beaucoup de flexibilité dans la création de ses
 tables, nous avons appliqué des techniques solides de base de données
-dans la création de notre schéma.  Notre schéma est 3NF, ce qui est
-considéré comme étant la forme normale la plus intéressante à avoir
-dans les applications.
+dans la création de notre schéma. Notre schéma est 3NF, qui est
+considérée comme étant la forme normale la plus intéressante à avoir
+dans les applications, car elle offre un bon équilibre entre
+l'intégrité référentielle et la facilité d'implémentation.
 
 Afin d'augmenter la sécurité de notre application, les mots de passe
 sont stockés en SHA1 dans la base de données plutôt qu'en clair.  Afin
@@ -90,12 +117,17 @@ pas ajouté de ``salt strings''.
 
 Ce TP a été rempli de problèmes, d'embûches et de ``hacks'' dûs à
 l'utilisation de vieilles technologies PHP (5.0.4) et MySQL (4.1.20)
-sur les serveurs du DIRO.
+sur les serveurs du DIRO.  La majorité du temps de développement n'a
+pas été passé dans l'ajout de nouvelle fonctionnalités, mais dans la
+ré-écriture de code existant dans un style plus ancien, moins
+modulaire et moins sécure afin d'être compatible avec l'environnement
+de déploiement.
 
 \subsection{Problème d'encodage de la base de données}
 
-Malgré que tous les niveaux de notre applications soient en UTF-8, il
-y en avait un qui était en latin1, le lien {\em mysqli} entre notre
+Malgré que tous les niveaux de notre applications soient en UTF-8
+(pages HTML, code PHP et JavaScript, base de données), il y avait une
+composante qui était en latin1, le lien {\em mysqli} entre notre
 application PHP et notre base de données MySQL. Étant donné qu'il y
 avait une différence d'encodage, les caractères accentués dans notre
 base de données apparaissaient comme le caractères de remplacement
@@ -109,7 +141,7 @@ Internet, on a fini par trouver la commande {\em \$mysqli->query(``SET
 
 Nous avons initialement choisis d'utiliser le module mysqli dans PHP
 pour effectuer nos requêtes à la base de donnés, car contrairement au
-module mysql, il permet de créer des requêtes dites préparées où les
+module mysql, il permet de créer des requêtes préparées où les
 procédures d'échappement sont laissées au soin de la librairie.
 Malheureusement, cette fonctionnalité dans PHP 5.0.4 a un bug (elle
 retourne des entiers aléatoires pour les clés primaires de tables) et
@@ -118,21 +150,21 @@ utiliser le remplacement de chaîne bête, nous exposant ainsi à toutes
 sortes d'injections SQL possibles.
 
 Un autre bug dans mysqli se trouve dans la méthode {\em
-  real\_escape\_string} qui retournait toujours une chaîne vide plutôt
-qu'une chaîne où les caractères spéciaux étaient échappés.  Nous avons
-dû nous résoudre à utiliser la fonction {\em addslashes()} qui est
-beaucoup moins sécure.
+  real\_escape\_string}; elle nous retournait toujours une chaîne vide
+plutôt qu'une chaîne où les caractères spéciaux étaient échappés. Nous
+avons dû nous résoudre à utiliser la fonction moins sécure {\em
+  addslashes()}.
 
 \subsection{Absence de json\_encode et json\_decode}
 
-Notre application fait un usage très fort de technologies Javascript,
+Notre application fait un usage très fort de technologies JavaScript,
 et la plupart des données générées par notre code JS est du JSON. Les
 versions récentes de PHP possèdent des fonction pour encoder et
 décoder le JSON. Malheureusement, une fois de plus la version
-préhistorique de PHP qui est installée au DIRO nous a causé problème.
-Nous avons donc dû nous résoudre à utiliser des fonctions d'encodage
-et de décodage de qualité inférieure qui ont été trouvées sur des
-forums d'aide de PHP.
+préhistorique de PHP qui est installée au DIRO nous a causé problème,
+car elle ne possède pas cette fonctionnalité. Nous avons donc dû nous
+résoudre à utiliser des fonctions d'encodage et de décodage de qualité
+inférieure qui ont été trouvées sur des forums d'aide de PHP.
 
 \subsection{No framework}
 
