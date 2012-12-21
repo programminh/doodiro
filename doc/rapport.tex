@@ -105,7 +105,7 @@ de PHP, donc impossible de s'en servir. À force de chercher sur
 Internet, on a fini par trouver la commande {\em \$mysqli->query(``SET
   NAMES utf8'')} qui permet de régler le problème.
 
-\subsection{Bug dans mysqli}
+\subsection{Bugs dans mysqli}
 
 Nous avons initialement choisis d'utiliser le module mysqli dans PHP
 pour effectuer nos requêtes à la base de donnés, car contrairement au
@@ -116,6 +116,12 @@ retourne des entiers aléatoires pour les clés primaires de tables) et
 donc nous avons dû abandonner la sécurité des requêtes préparées et
 utiliser le remplacement de chaîne bête, nous exposant ainsi à toutes
 sortes d'injections SQL possibles.
+
+Un autre bug dans mysqli se trouve dans la méthode {\em
+  real\_escape\_string} qui retournait toujours une chaîne vide plutôt
+qu'une chaîne où les caractères spéciaux étaient échappés.  Nous avons
+dû nous résoudre à utiliser la fonction {\em addslashes()} qui est
+beaucoup moins sécure.
 
 \subsection{Absence de json\_encode et json\_decode}
 
