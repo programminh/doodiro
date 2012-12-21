@@ -6,6 +6,15 @@ if (! $_SESSION['is_logged_in']) {
     header('Location: login.php');
 }
 
+if(! isset($_GET['p'])) {
+    $content = 'admin/events.php';
+    $menu = 1;
+}
+else {
+    $content = 'admin/'.$_GET['p'];
+    $menu = 2;
+}
+
 // Fetching user's info from the session
 $user = $_SESSION['user'];
 ?>
@@ -76,8 +85,8 @@ $user = $_SESSION['user'];
         	<div class="row">
         		<div class="span12">
         			<ul class="nav nav-pills pull-right">
-		        		<li class="active"><a href="#">Événements</a></li>
-		        		<li><a href="#">Utilisateurs</a></li>
+		        		<li <?php echo ($menu == 1) ? 'class="active"' : '' ?>><a href="admin.php">Événements</a></li>
+		        		<li <?php echo ($menu == 2) ? 'class="active"' : '' ?>><a href="admin.php?p=users">Utilisateurs</a></li>
 		        	</ul>
         		</div>
         		<div class="span12">
@@ -96,7 +105,7 @@ $user = $_SESSION['user'];
 
         <script src="js/vendor/jquery-ui-1.9.2.custom.js"></script>
 
-        <?php include('admin/events.php'); ?>
+        <?php include($content); ?>
 
     </body>
 </html>
