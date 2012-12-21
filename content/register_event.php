@@ -105,6 +105,11 @@ $c = count($event_dates);
         </form>
 
         <h1>Autres invités</h1>
+        <?php if ($event->type == 'private'): ?>
+        <div class="alert">
+            Cet événement est privé, vous ne verrez donc pas le nom des autres invités.
+        </div>
+        <?php endif ?>
         <?php foreach ($others_reservations as $invitee_name => $reservations): ?>
         <?php if ($event->type === 'public'): ?>
         <legend><?php echo $invitee_name ?></legend>

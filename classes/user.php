@@ -187,4 +187,25 @@ class User extends Database {
         }
     }
 
+    public static function delete($id) {
+        $mysqli = self::db_connect();
+
+        $query = "DELETE FROM users WHERE id = {$id}";
+        $mysqli->query($query);
+        $mysqli->close();
+
+        return true;
+    }
+
+    public static function insert($new_user) {
+        $mysqli = self::db_connect();
+        $email = trim($new_user['email']);
+        $password = sha1(trim($new_user['password']));
+        $firstname = trim($new_user['firstname']);
+        $lastname = trim($new_user['lastname']);
+        $query = "insert into users (email, password, firstname, lastname) values('$email', '$password', '$firstname', '$lastname')";
+        $mysqli->query($query);
+        $mysqli->close();
+        return true;
+    }
 }
