@@ -83,7 +83,7 @@ $users = User::find_all();
 			var user_name = $(this).parent().siblings('.name');
 			var user_row = $(this).parent().parent();
 
-			if(confirm('Voulez-vous vraiment effacé l\'usager: ' + user_name.text())) {
+			if(confirm('Voulez-vous vraiment effacer l\'usager: ' + user_name.text())) {
 				delete_user(user_row);
 			}
 		});
@@ -103,9 +103,9 @@ $users = User::find_all();
 			});
 		});
 
-		function delete_event(user_row) {
+		function delete_user(user_row) {
 			var data = { user_id: user_row.data('id') };
-
+            console.log(data, user_row);
 			$.ajax({
 				url: "admin/delete_user.php",
 				type: "POST",
@@ -114,12 +114,12 @@ $users = User::find_all();
 					if(msg) {
 						var message = '<div class="alert alert-warning"> \
 								<button type="button" class="close" data-dismiss="alert">&times;</button> \
-								L\'usager' + user_row.children('.name').text() + ' a été supprimé!</div>';
+								L\'usager ' + user_row.children('.name').text() + ' a été supprimé!</div>';
 
 						$('#users-table').parent()
 							.prepend(message);
 
-						event_row.slideUp('slow', function() {
+						user_row.slideUp('slow', function() {
 							$(this).remove();
 						})
 					}
@@ -161,7 +161,7 @@ $users = User::find_all();
 
 					var message = '<div class="alert alert-success"> \
 								<button type="button" class="close" data-dismiss="alert">&times;</button> \
-								L\'usager' + data.firstname + ' ' + data.lastname + ' a été ajouté!</div>';
+								L\'usager ' + data.firstname + ' ' + data.lastname + ' a été ajouté!</div>';
 
 					var newRow = '<tr data-id="'+user_id+'" class="user"> \
 									<td class="name">'+data.firstname+' '+data.lastname+'</td> \
