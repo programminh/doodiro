@@ -29,7 +29,7 @@ class Event extends Database {
         $query = "DELETE FROM events WHERE id = {$event_id}";
         $mysqli->query($query);
         $mysqli->close();
-        
+
         return true;
     }
 
@@ -74,15 +74,14 @@ class Event extends Database {
      * @return true             True if everything went as expected
      */
     public static function new_event($new_event) {
-
+        $mysqli = self::db_connect();
+       
         $organizer_id = $new_event['organizer_id'];
-        $name = trim(mysql_real_escape_string($new_event['title']));
-        $description = trim(mysql_real_escape_string($new_event['description']));
+        $name = trim(addslashes($new_event['title']));
+        $description = trim(addslashes($new_event['description']));
         $duration = $new_event['duration'];
         $type = $new_event['type'];
 
-        $mysqli = self::db_connect();
-       
         // Create the event
         $query = "INSERT INTO events (organizer, name, description, type, duration) VALUES ({$organizer_id}, '{$name}', '{$description}', '{$type}', {$duration})";
         $mysqli->query($query);
