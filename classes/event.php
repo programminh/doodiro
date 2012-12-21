@@ -23,6 +23,20 @@ class Event extends Database {
 		$this->duration = $array['duration'];
 	}
 
+    public static function delete($event_id) {
+        $mysqli = self::db_connect();
+
+        $query = "DELETE FROM events WHERE id = {$event_id}";
+        $mysqli->query($query);
+        $mysqli->close();
+        
+        return true;
+    }
+
+    /**
+     * Return all the events
+     * @return array An array of events
+     */
     public static function find_all() {
         $mysqli = self::db_connect();
 

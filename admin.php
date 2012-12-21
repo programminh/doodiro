@@ -42,7 +42,7 @@ $user = $_SESSION['user'];
                         <a class="btn" href="index.php">
                             Doodiro
                         </a>
-                        <a class="btn btn-success" href="?p=new_event">
+                        <a class="btn btn-success" href="index.php?p=new_event">
                             Nouveau
                         </a>
                         <?php if ($user->is_admin): ?>
