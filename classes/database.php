@@ -3,7 +3,6 @@ class Database {
 
     protected static function db_connect() {
         require('config.php');
-
         $mysqli = new mysqli($database['hostname'], $database['username'], $database['password'], $database['dbname']);
 
         if (mysqli_connect_errno()) {
@@ -11,10 +10,7 @@ class Database {
             die();
         }
 
-        if (!$mysqli->set_charset("utf8")) {
-		    printf("Error loading character set utf8: %s\n", $mysqli->error);
-		    die();
-		}
+        $mysqli->query("SET NAMES utf8");  
 
         return $mysqli;
     }
