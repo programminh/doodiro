@@ -90,8 +90,7 @@ $c = count($event_dates);
             </table>
             <input type="submit" class="btn" value="Enregistrer" />
         </form>
-
-
+        
         <?php foreach ($others_reservations as $invitee_name => $reservations): ?>
         <legend><?php echo $invitee_name; ?></legend>
 
