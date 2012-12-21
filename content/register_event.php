@@ -9,8 +9,8 @@ function is_going($reservations, $date, $hour) {
     return "maybe";
 }
 
-function display_square($reservations, $date, $hour, $input_field) {
-    $input_name = "h_{$date}_{$hour}";
+function display_square($reservations, $event_date_id, $date, $hour, $input_field) {
+    $input_name = "h_{$event_date_id}_{$date}_{$hour}";
     $is_going = is_going($reservations, $date, $hour);
     if ($is_going === "yes") {
         $td_class = "going";
@@ -43,6 +43,19 @@ if (!$event->userIsInvited($user->id)) {
 }
 
 
+if (!empty($_POST)) {
+    $event->deleteAllReservationsFor($user->id);
+    $availabilities = array();
+    foreach ($_POST as $date_time => $can_go) {
+        if ($can_go != -1) {
+            $can_go_sql = $can_go == "1" ? 1 : 0;
+            list($ignore, $id, $date, $hour) = explode("_", $date_time);
+            $availabilities[] = "({$user->id}, $id, '$hour:00:00', $can_go_sql)";
+        }
+    }
+    $availabilities_string = implode(", ", $availabilities);
+    $event->insertAvailabilities($availabilities_string);
+}
 
 $event_dates = $event->dates();
 $invitees = array_diff($event->getInvitees(), array($user->id));
@@ -79,7 +92,7 @@ $c = count($event_dates);
                         <th><?php echo $event_dates[$i]["date"] ?></th>
                         <?php for ($h = 0; $h < 24; $h++): ?>
                             <?php if ($h >= $event_dates[$i]["start_hour"] && $h < $event_dates[$i]["end_hour"]): ?>
-                            <?php echo display_square($my_reservations, $event_dates[$i]["date"], $h, TRUE) ?>
+                            <?php echo display_square($my_reservations, $event_dates[$i]['id'], $event_dates[$i]["date"], $h, TRUE) ?>
                             <?php else: ?>
                             <td class="no-reservation">&nbsp;</td>
                             <?php endif ?>
@@ -111,7 +124,7 @@ $c = count($event_dates);
                     <th><?php echo $event_dates[$i]["date"] ?></th>
                     <?php for ($h = 0; $h < 24; $h++): ?>
                         <?php if ($h >= $event_dates[$i]["start_hour"] && $h < $event_dates[$i]["end_hour"]): ?>
-                        <?php echo display_square($reservations, $event_dates[$i]["date"], $h, FALSE) ?>
+                        <?php echo display_square($reservations, $event_dates[$i]["id"], $event_dates[$i]["date"], $h, FALSE) ?>
                         <?php else: ?>
                         <td class="no-reservation">&nbsp;</td>
                         <?php endif ?>

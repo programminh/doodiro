@@ -90,13 +90,14 @@ class Event extends Database {
 
     public function dates() {
         $mysqli = self::db_connect();
-        $query = "select date, hour(start_time) start_hour, hour(end_time) end_hour from event_dates where event_id = {$this->id} order by date";
+        $query = "select id, date, hour(start_time) start_hour, hour(end_time) end_hour from event_dates where event_id = {$this->id} order by date";
         if ($stmt = $mysqli->query($query)) {
 
             $dates = array();
 
             while ($obj = $stmt->fetch_object()) {
                 $dates[] = array(
+                    "id" => $obj->id,
                     "date" => $obj->date,
                     "start_hour" => $obj->start_hour,
                     "end_hour" => $obj->end_hour);
@@ -135,15 +136,19 @@ ENDSQL;
 
     public function deleteAllReservationsFor($user_id) {
         $mysqli = self::db_connect();
-        $query = "delete from reservations where user_id = $user_id and event_dates_id in (select id from event_dates where event_id = {$this->id})";
+        $query = "delete from reservations where user_id = $user_id and event_date_id in (select id from event_dates where event_id = {$this->id})";
         if ($stmt = $mysqli->query($query)) {
-            $n = $stmt->affected_rows();
-            $stmt->close();
             $mysqli->close();
-            return $n;
+            return TRUE;
         }
         else {
             return FALSE;
         }   
+    }
+
+    public function insertAvailabilities($avs) {
+        $mysqli = self::db_connect();
+        $query = "insert into reservations (user_id, event_date_id, reservation_time, can_go) VALUES $avs";
+        $mysqli->query($query);
     }
 }
