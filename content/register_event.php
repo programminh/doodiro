@@ -50,8 +50,9 @@ $my_reservations = $event->getReservationsFor($user->id);
 $others_reservations = array();
 foreach ($invitees as $invitee) {
     list($invitee_id, $invitee_name) = $invitee;
-    if ($invitee_id === $user->id)
+    if ($invitee_id == $user->id) {
         continue;
+    }
     $others_reservations[$invitee_name] = $event->getReservationsFor($invitee_id);
 }
 $c = count($event_dates);
@@ -89,6 +90,7 @@ $c = count($event_dates);
             </table>
             <input type="submit" class="btn" value="Enregistrer" />
         </form>
+        
         <?php foreach ($others_reservations as $invitee_name => $reservations): ?>
         <legend><?php echo $invitee_name; ?></legend>
 

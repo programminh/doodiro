@@ -3,6 +3,7 @@
 class Event extends Database {
 	public $id;
 	public $organizer;
+	public $organizer_name;
 	public $name;
 	public $description;
 	public $type;
@@ -15,6 +16,7 @@ class Event extends Database {
 	public function __construct($array) {
 		$this->id = $array['id'];
 		$this->organizer = $array['organizer'];
+		$this->organizer_name = $array['organizer_name'];
 		$this->name = $array['name'];
 		$this->description = $array['description'];
 		$this->type = $array['type'];
@@ -31,23 +33,19 @@ class Event extends Database {
 
     public static function find($id) {
         $mysqli = self::db_connect();
-        $query = 'select organizer, name, description, type, duration from events where id = ?';
-        if ($stmt = $mysqli->prepare($query)) {
-            $stmt->bind_param("i", $id);
-            $stmt->bind_result($organizer, $name, $description, $type, $duration);
-            $stmt->execute();
-            $ok = $stmt->fetch();
-            $stmt->close();
-            $mysqli->close();
+        $query = "select e.organizer, concat(u.firstname, ' ', u.lastname) organizer_name, e.name, e.description, e.type, e.duration from events e, users u where e.id = $id and u.id = e.organizer";
+        if ($stmt = $mysqli->query($query)) {
+            $obj = $stmt->fetch_object();
 
-            if ($ok) {
+            if ($obj) {
                 return new Event(array(
                     "id" => $id,
-                    "organizer" => $organizer,
-                    "name" => $name,
-                    "description" => $description,
-                    "type" => $type,
-                    "duration" => $duration
+                    "organizer" => $obj->organizer,
+                    "organizer_name" => $obj->organizer_name,
+                    "name" => $obj->name,
+                    "description" => $obj->description,
+                    "type" => $obj->type,
+                    "duration" => $obj->duration
                 ));
             }
             else {
@@ -75,17 +73,13 @@ class Event extends Database {
 
     public function getInvitees() {
         $mysqli = self::db_connect();
-        $query = "select i.user_id, concat(u.firstname, ' ', u.lastname) fullname from invitations i, users u where event_id = ? and u.id = i.user_id";
-        if ($stmt = $mysqli->prepare($query)) {
-            $stmt->bind_param("i", $this->id);
-            $stmt->bind_result($user_id, $fullname);
-            $stmt->execute();
-
+        $query = "select i.user_id, concat(u.firstname, ' ', u.lastname) fullname from invitations i, users u where event_id = {$this->id} and u.id = i.user_id";
+        if ($result = $mysqli->query($query)) {
             $invitees = array();
-            while ($stmt->fetch()) {
-                $invitees[] = array($user_id, $fullname);
+            while ($obj = $result->fetch_object()) {
+                $invitees[] = array($obj->user_id, $obj->fullname);
             }
-            $stmt->close();
+            $result->close();
             $mysqli->close();
             return $invitees;
         }
@@ -96,19 +90,16 @@ class Event extends Database {
 
     public function dates() {
         $mysqli = self::db_connect();
-        $query = 'select date, hour(start_time), hour(end_time) from event_dates where event_id = ? order by date';
-        if ($stmt = $mysqli->prepare($query)) {
-            $stmt->bind_param("i", $this->id);
-            $stmt->bind_result($date, $start_time, $end_time);
-            $stmt->execute();
+        $query = "select date, hour(start_time) start_hour, hour(end_time) end_hour from event_dates where event_id = {$this->id} order by date";
+        if ($stmt = $mysqli->query($query)) {
 
             $dates = array();
 
-            while ($stmt->fetch()) {
+            while ($obj = $stmt->fetch_object()) {
                 $dates[] = array(
-                    "date" => $date,
-                    "start_hour" => $start_time,
-                    "end_hour" => $end_time);
+                    "date" => $obj->date,
+                    "start_hour" => $obj->start_hour,
+                    "end_hour" => $obj->end_hour);
             }
 
             $stmt->close();
@@ -123,19 +114,15 @@ class Event extends Database {
     public function getReservationsFor($user_id) {
         $mysqli = self::db_connect();
         $query = <<<ENDSQL
-        select ed.date, hour(r.reservation_time), r.can_go 
+        select ed.date, hour(r.reservation_time) res_time, r.can_go 
         from reservations r, event_dates ed 
-        where r.event_date_id = ed.id and ed.event_id = ? and r.user_id = ?
+        where r.event_date_id = ed.id and ed.event_id = {$this->id} and r.user_id = $user_id
 ENDSQL;
-        if ($stmt = $mysqli->prepare($query)) {
-            $stmt->bind_param("ii", $this->id, $user_id);
-            $stmt->bind_result($date, $reservation_time, $can_go);
-            $stmt->execute();
-
+        if ($stmt = $mysqli->query($query)) {
             $availabilities = array();
-            while ($stmt->fetch()) {
-                $availabilities[$date][$reservation_time] = $can_go;
-            }
+            while ($obj = $stmt->fetch_object()) {
+                $availabilities[$obj->date][$obj->res_time] = $obj->can_go;
+        }
             $stmt->close();
             $mysqli->close();
             return $availabilities;

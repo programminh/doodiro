@@ -57,25 +57,21 @@ class User extends Database {
 	 */
     public static function auth($email, $password) {
         $mysqli = self::db_connect();
+        $password = sha1($password);
+        $query = "SELECT id, email, firstname, lastname, is_admin FROM users WHERE email='$email' AND password='$password'";
 
-        $query = 'SELECT id, email, firstname, lastname, is_admin FROM users WHERE email=? AND password=?';
-
-        if ($stmt = $mysqli->prepare($query)) {
-            $password = sha1($password);
-        	$stmt->bind_param("ss", $email, $password);
-            $stmt->execute();
-            $stmt->bind_result($id, $email, $firstname, $lastname, $is_admin);
-            $ok = $stmt->fetch();
+        if ($stmt = $mysqli->query($query)) {
+            $obj = $stmt->fetch_object();
             $stmt->close();
             $mysqli->close();
 
-            if ($ok) {
+            if ($obj) {
                 return new User(array(
-                	'id' => $id,
-                	'email' => $email,
-                	'firstname' => $firstname,
-                	'lastname' => $lastname,
-                	'is_admin' => $is_admin
+                	'id' => $obj->id,
+                	'email' => $obj->email,
+                	'firstname' => $obj->firstname,
+                	'lastname' => $obj->lastname,
+                	'is_admin' => $obj->is_admin
                 	));
             }
             else {
@@ -133,20 +129,17 @@ class User extends Database {
     public function events() {
     	$events = array();
         $mysqli = self::db_connect();
-
-        $query = "select e.id, e.organizer, e.name, e.description, e.type, e.duration from events e, invitations i where e.id = i.event_id and i.user_id = ? order by name";
-        if ($stmt = $mysqli->prepare($query)) {
-            $stmt->bind_param("i", $this->id);
-            $stmt->bind_result($event_id, $event_organizer, $event_name, $event_description, $event_type, $event_duration);
-            $stmt->execute();
-            while ($stmt->fetch()) {
+        $query = "select e.id, e.organizer, concat(u.firstname, ' ', u.lastname) as fullname, e.name, e.description, e.type, e.duration from events e, invitations i, users u where e.id = i.event_id and i.user_id = {$this->id} and e.organizer = u.id order by name";
+        if ($stmt = $mysqli->query($query)) {
+            while ($obj = $stmt->fetch_object()) {
                 $events[] = new Event(array(
-                	'id' => $event_id, 
-                	'organizer' => $event_organizer,
-                	'name' => $event_name,
-                    'description' => $event_description,
-                	'type' => $event_type,
-                    'duration' => $event_duration
+                	'id' => $obj->id, 
+                	'organizer' => $obj->organizer,
+                	'organizer_name' => $obj->fullname,
+                	'name' => $obj->name,
+                    'description' => $obj->description,
+                	'type' => $obj->type,
+                    'duration' => $obj->duration
                 	));
             }
             $stmt->close();
