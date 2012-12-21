@@ -23,6 +23,64 @@ class Event extends Database {
 		$this->duration = $array['duration'];
 	}
 
+    /**
+     * Creates a new event
+     * The new event array looks like this
+     * $new_event = array(
+     *     'title' => string,
+     *     'organizer_id' => int,
+     *     'description' => string,
+     *     'duration' => int,
+     *     'type' => string,
+     *     'invitees' => array('id' => int, 'fullename' => string),
+     *     'dates' => array('date' => date, 'fromTime' => time, 'toTime' => time)
+     *     );
+     * @param  array $new_event Array containing the new event information
+     * @return true             True if everything went as expected
+     */
+    public static function new_event($new_event) {
+
+        $organizer_id = $new_event['organizer_id'];
+        $name = trim(mysql_real_escape_string($new_event['title']));
+        $description = trim(mysql_real_escape_string($new_event['description']));
+        $duration = $new_event['duration'];
+        $type = $new_event['type'];
+
+        $mysqli = self::db_connect();
+       
+        // Create the event
+        $query = "INSERT INTO events (organizer, name, description, type, duration) VALUES ({$organizer_id}, '{$name}', '{$description}', '{$type}', {$duration})";
+        $mysqli->query($query);
+
+        // Get the new event id
+        $new_event_id = $mysqli->insert_id;
+
+        // Link the invitees to the new event
+        foreach ($new_event['invitees'] as $invitee) {
+            $invitee_id = $invitee['id'];
+            $query = "INSERT INTO invitations (user_id, event_id) VALUES ({$invitee_id}, {$new_event_id})";
+
+            $mysqli->query($query);
+        }
+
+        // Add the owner to the list of invitee
+        $query = "INSERT INTO invitations (user_id, event_id) VALUES({$organizer_id}, {$new_event_id})";
+        $mysqli->query($query);
+
+        // Link the dates to the new event
+        foreach ($new_event['dates'] as $date) {
+            $event_date = $date['date'];
+            $start_time = $date['fromTime'];
+            $end_time = $date['toTime'];
+
+            $query = "INSERT INTO event_dates (event_id, date, start_time, end_time) VALUES ({$new_event_id}, '{$event_date}', '{$start_time}', '{$end_time}')";
+
+            $mysqli->query($query);
+        }
+
+        return true;
+    }
+
 	/**
 	 * Get the organizer
 	 * @return object The organizer

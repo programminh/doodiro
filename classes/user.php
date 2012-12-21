@@ -23,13 +23,19 @@ class User extends Database {
         return $this->firstname . " " . $this->lastname;
     }
 
-    public static function find_all_names() {
+    /**
+     * Return the name and the if off all the users except
+     * the logged in user
+     * @param  [type] $except_owner [description]
+     * @return [type]               [description]
+     */
+    public static function find_all_names($logged_in_user_id) {
         $mysqli = self::db_connect();
 
-        $query = 'SELECT id, firstname, lastname from users';
+        $query = 'SELECT id, firstname, lastname from users WHERE id != ?';
 
         if($stmt = $mysqli->prepare($query)) {
-            $stmt->bind_param('s', $user_id);
+            $stmt->bind_param('i', $logged_in_user_id);
             $stmt->execute();
             $stmt->bind_result($id, $firstname, $lastname);
             while($stmt->fetch()) {

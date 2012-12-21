@@ -1,6 +1,6 @@
 <?php
 include('custom_functions.php');
-$all_users = __json_encode(User::find_all_names());
+$all_users = __json_encode(User::find_all_names($user->id));
 ?>
 
 
@@ -78,7 +78,8 @@ $all_users = __json_encode(User::find_all_names());
 				</div><!-- End Date -->
 
 				<div class="form-actions">
-				  	<button type="submit" class="btn btn-primary">Enregistrer</button>
+				  	<button type="submit" class="btn btn-primary" id="save-event">Enregistrer</button>
+				  	<img style="margin-left: 10px" class="hide" src="img/ajax-loader.gif" id="loader" alt="Loader">
 				</div>
 
 			</form>
@@ -224,6 +225,14 @@ $all_users = __json_encode(User::find_all_names());
 		}
 
 		$('#new_event_form').submit(function() {
+			if (! $('#title').val()) return alert('Le titre ne peut être vide.');
+			if (! $('#description').val()) return alert('La description ne peut être vide.');
+			if (! invitees.length) return alert('La liste des invitées ne peut être vide.');
+			if (! dates.length) return alert('La liste des dates ne peut être vide.');
+
+			$('#save-event').attr('disabled', true);
+			$('#loader').removeClass('hide');
+
 			var data = {
 				title: $('#title').val(),
 				description: $('#description').val(),
@@ -240,12 +249,17 @@ $all_users = __json_encode(User::find_all_names());
 				type: "POST",
 				data: data,
 				success: function(msg) {
-					$('body').append(msg);
+					if (msg) {
+						$('#new_event_form').parent()
+							.prepend('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>L\'événement a été créer avec succès</div>');
+					}
+					$('#loader').addClass('hide');
+					$('#new_event_form :input').attr('disabled', true);
+					$('.close').remove;
 				}
 			});
 
 			return false;
 		});
-
 	});
 </script>

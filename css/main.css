@@ -2,6 +2,10 @@
    Author's custom styles
    ========================================================================== */
 
+.hide {
+	display: none;
+}
+
 #top-menu {
 	margin-bottom: 40px;
 }
