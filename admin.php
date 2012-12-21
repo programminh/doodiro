@@ -11,7 +11,7 @@ if(! isset($_GET['p'])) {
     $menu = 1;
 }
 else {
-    $content = 'admin/'.$_GET['p'];
+    $content = 'admin/'.$_GET['p'].'.php';
     $menu = 2;
 }
 

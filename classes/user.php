@@ -24,6 +24,24 @@ class User extends Database {
     }
 
     /**
+     * Find all the users except the administrator
+     * @return [type] [description]
+     */
+    public static function find_all() {
+        $mysqli = self::db_connect();
+        $query = "SELECT * FROM users WHERE is_admin != 1";
+
+        $result = $mysqli->query($query);
+
+        while($obj = $result->fetch_assoc()) {
+            $users[] = new User($obj);
+        }
+
+        $mysqli->close();
+        return $users;
+    }
+
+    /**
      * Return the name and the if off all the users except
      * the logged in user
      * @param  [type] $except_owner [description]
@@ -126,6 +144,18 @@ class User extends Database {
     		die("Can't create statement: ".$mysqli->error);
     	}
 
+    }
+
+    public function count_events() {
+        $mysqli = self::db_connect();
+        $query = "select count(id) as count from events where organizer = {$this->id}";
+        $result = $mysqli->query($query);
+
+        $obj = $result->fetch_object();
+
+        $mysqli->close();
+
+        return $obj->count;
     }
 
     /**
