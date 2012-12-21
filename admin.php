@@ -1,4 +1,4 @@
-<?php 
+<?php
 require('bootstrap.php');
 
 // Redirect to login if not logged in
@@ -8,21 +8,13 @@ if (! $_SESSION['is_logged_in']) {
 
 // Fetching user's info from the session
 $user = $_SESSION['user'];
-
-// Getting page content
-if(! isset($_GET['p'])) {
-    $content = 'content/list_event.php';
-}
-else {
-    $content = 'content/'.$_GET['p'].'.php';
-}
 ?>
 <!DOCTYPE html>
 <html class="no-js">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>IFT3225 - Doodiro</title>
+        <title>IFT3225 - Doodiro - Admin</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -43,7 +35,6 @@ else {
         <![endif]-->
     </head>
     <body>
-
         <div class="container" id="top-menu">
             <div class="row">
                 <div class="span6">
@@ -66,8 +57,36 @@ else {
                     </h5>
                 </div>
             </div>
+            <?php if (! $user->is_admin): ?>
+	    		<div style="margin-top: 40px" class="span6 offset3">
+	    			<div class="alert alert-danger" style="text-align: center">
+	    				<h2>Autorisation refusé</h2>
+	    				<h5>
+	    					Votre autorisation est aussi refusée qu'une offre du banquier 
+	    					présentée par Julie Snyder lorsqu'il reste seulement des montants
+	    					dans la colonne de droite
+	    				</h5>
+	    			</div>
+	    		</div>
+    			<?php die() ?>
+    		<?php endif ?>
         </div>
 
+        <div class="container">
+        	<div class="row">
+        		<div class="span12">
+        			<ul class="nav nav-pills pull-right">
+		        		<li class="active"><a href="#">Événements</a></li>
+		        		<li><a href="#">Utilisateurs</a></li>
+		        	</ul>
+        		</div>
+        		<div class="span12">
+        			<hr>
+        		</div>
+        	</div>
+        </div>
+
+        
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
 
@@ -77,7 +96,7 @@ else {
 
         <script src="js/vendor/jquery-ui-1.9.2.custom.js"></script>
 
-        <?php include($content); ?>
+        <?php include('admin/events.php'); ?>
 
     </body>
 </html>

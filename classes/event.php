@@ -23,6 +23,27 @@ class Event extends Database {
 		$this->duration = $array['duration'];
 	}
 
+    public static function find_all() {
+        $mysqli = self::db_connect();
+
+        $query = "SELECT * FROM events";
+        $result = $mysqli->query($query);
+
+        while($obj = $result->fetch_object()) {
+            $events[] = new Event(array(
+                'id' => $obj->id,
+                'organizer' => $obj->organizer,
+                'organizer_name' => '',
+                'name' => $obj->name,
+                'description' => $obj->description,
+                'type' => $obj->type,
+                'duration' => $obj->duration
+                ));
+        }
+
+        return $events;
+    }
+
     /**
      * Creates a new event
      * The new event array looks like this
