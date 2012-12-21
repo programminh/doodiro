@@ -9,8 +9,8 @@ function is_going($reservations, $date, $hour) {
     return "maybe";
 }
 
-function display_square($reservations, $date, $hour, $input_field) {
-    $input_name = "h_{$date}_{$hour}";
+function display_square($reservations, $event_date_id, $date, $hour, $input_field) {
+    $input_name = "h_{$event_date_id}_{$date}_{$hour}";
     $is_going = is_going($reservations, $date, $hour);
     if ($is_going === "yes") {
         $td_class = "going";
@@ -43,6 +43,19 @@ if (!$event->userIsInvited($user->id)) {
 }
 
 
+if (!empty($_POST)) {
+    $event->deleteAllReservationsFor($user->id);
+    $availabilities = array();
+    foreach ($_POST as $date_time => $can_go) {
+        if ($can_go != -1) {
+            $can_go_sql = $can_go == "1" ? 1 : 0;
+            list($ignore, $id, $date, $hour) = explode("_", $date_time);
+            $availabilities[] = "({$user->id}, $id, '$hour:00:00', $can_go_sql)";
+        }
+    }
+    $availabilities_string = implode(", ", $availabilities);
+    $event->insertAvailabilities($availabilities_string);
+}
 
 $event_dates = $event->dates();
 $invitees = array_diff($event->getInvitees(), array($user->id));
@@ -60,8 +73,8 @@ $c = count($event_dates);
 
 
 <div class="container">
-    <h1><?php echo $event->name ?></h1>
 	<div class="row">
+        <h1><?php echo $event->name ?></h1>
         <form id="new_event_form" class="form-horizontal" method="post" action="">
 	        <legend>Mes disponibilités</legend>
 
@@ -79,7 +92,7 @@ $c = count($event_dates);
                         <th><?php echo $event_dates[$i]["date"] ?></th>
                         <?php for ($h = 0; $h < 24; $h++): ?>
                             <?php if ($h >= $event_dates[$i]["start_hour"] && $h < $event_dates[$i]["end_hour"]): ?>
-                            <?php echo display_square($my_reservations, $event_dates[$i]["date"], $h, TRUE) ?>
+                            <?php echo display_square($my_reservations, $event_dates[$i]['id'], $event_dates[$i]["date"], $h, TRUE) ?>
                             <?php else: ?>
                             <td class="no-reservation">&nbsp;</td>
                             <?php endif ?>
@@ -90,9 +103,12 @@ $c = count($event_dates);
             </table>
             <input type="submit" class="btn" value="Enregistrer" />
         </form>
-        
+
+        <h1>Autres invités</h1>
         <?php foreach ($others_reservations as $invitee_name => $reservations): ?>
-        <legend><?php echo $invitee_name; ?></legend>
+        <?php if ($event->type === 'public'): ?>
+        <legend><?php echo $invitee_name ?></legend>
+        <?php endif ?>
 
         <table border="1">
             <tr>
@@ -108,7 +124,7 @@ $c = count($event_dates);
                     <th><?php echo $event_dates[$i]["date"] ?></th>
                     <?php for ($h = 0; $h < 24; $h++): ?>
                         <?php if ($h >= $event_dates[$i]["start_hour"] && $h < $event_dates[$i]["end_hour"]): ?>
-                        <?php echo display_square($reservations, $event_dates[$i]["date"], $h, FALSE) ?>
+                        <?php echo display_square($reservations, $event_dates[$i]["id"], $event_dates[$i]["date"], $h, FALSE) ?>
                         <?php else: ?>
                         <td class="no-reservation">&nbsp;</td>
                         <?php endif ?>
@@ -123,27 +139,25 @@ $c = count($event_dates);
 
 <script>
 $(function () {
-    var classes = ["going", "not-going", "not-sure"];
-    var icons = ["icon-ok-sign", "icon-remove-sign", ""];
-    var values = ["1", "0", "-1"];
+    var properties = {
+        "0": ["not-sure", "", "-1"],
+        "1": ["not-going", "icon-remove-sign", "0"],
+        "-1": ["going", "icon-ok-sign", "1"],
+    };
     $("#my-availabilities .changeable").click(function () {
-        var that = $(this);
-        var currentClass = that.prop("class").split(" ")[1]; // Yuck.
-        var nextClass = classes[(classes.indexOf(currentClass) + 1) % 3];
-        that.removeClass(currentClass);
-        that.addClass(nextClass);
-
-        var icon = that.find("i");
+        var td = $(this);
+        var currentClass = td.prop("class").split(" ")[1]; // Yuck.
+        var icon = td.find("i");
         var currentIcon = icon.prop("class");
-        var nextIcon = icons[(icons.indexOf(currentIcon) + 1) % 3];
-        icon.removeClass(currentIcon);
-        icon.addClass(nextIcon);
-
-        var hidden = that.find("input");
+        var hidden = td.find("input");
         var currentValue = hidden.prop("value");
-        var nextValue = values[(values.indexOf(currentValue) + 1) % 3];
-        hidden.prop("value", nextValue);
 
+        var nextProperties = properties[currentValue];
+        td.removeClass(currentClass);
+        icon.removeClass(currentIcon);
+        td.addClass(nextProperties[0]);
+        icon.addClass(nextProperties[1]);
+        hidden.prop("value", nextProperties[2]);
     });
 });
 </script>
