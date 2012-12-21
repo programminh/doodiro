@@ -131,4 +131,19 @@ ENDSQL;
             return FALSE;
         }
     }
+
+
+    public function deleteAllReservationsFor($user_id) {
+        $mysqli = self::db_connect();
+        $query = "delete from reservations where user_id = $user_id and event_dates_id in (select id from event_dates where event_id = {$this->id})";
+        if ($stmt = $mysqli->query($query)) {
+            $n = $stmt->affected_rows();
+            $stmt->close();
+            $mysqli->close();
+            return $n;
+        }
+        else {
+            return FALSE;
+        }   
+    }
 }
