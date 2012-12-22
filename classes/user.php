@@ -29,7 +29,7 @@ class User extends Database {
      */
     public static function find_all() {
         $mysqli = self::db_connect();
-        $query = "SELECT * FROM users WHERE is_admin != 1";
+        $query = "SELECT * FROM users WHERE is_admin <> 1";
 
         $result = $mysqli->query($query);
 
@@ -50,20 +50,17 @@ class User extends Database {
     public static function find_all_names($logged_in_user_id) {
         $mysqli = self::db_connect();
 
-        $query = 'SELECT id, firstname, lastname from users WHERE id != ?';
+        $query = "SELECT id, firstname, lastname from users WHERE id <> $logged_in_user_id";
 
-        if($stmt = $mysqli->prepare($query)) {
-            $stmt->bind_param('i', $logged_in_user_id);
-            $stmt->execute();
-            $stmt->bind_result($id, $firstname, $lastname);
-            while($stmt->fetch()) {
+        if($result = $mysqli->query($query)) {
+            while($obj = $result->fetch_object()) {
                 $user = new stdClass();
-                $user->id = $id;
-                $user->fullname = $firstname.' '.$lastname;
+                $user->id = $obj->id;
+                $user->fullname = $obj->firstname.' '.$obj->lastname;
 
                 $users[] = $user;
             }
-
+            $mysqli->close();
             return $users;
 
         }
@@ -116,23 +113,19 @@ class User extends Database {
 
     	$mysqli = self::db_connect();
 
-    	$query = 'SELECT id, email, firstname, lastname, is_admin from users WHERE id = ?';
+    	$query = "SELECT id, email, firstname, lastname, is_admin from users WHERE id = $user_id";
 
-    	if($stmt = $mysqli->prepare($query)) {
-    		$stmt->bind_param('s', $user_id);
-    		$stmt->execute();
-    		$stmt->bind_result($id, $email, $firstname, $lastname, $is_admin);
-    		$ok = $stmt->fetch();
-    		$stmt->close();
+    	if($result = $mysqli->query($query)) {
+    		$obj = $result->fetch_object();
     		$mysqli->close();
 
-    		if ($ok) {
+    		if ($obj) {
     			return new User(array(
-    				'id' => $id,
-    				'email' => $email,
-    				'firstname' => $firstname,
-    				'lastname' => $lastname,
-    				'is_admin' => $is_admin
+    				'id' => $obj->id,
+    				'email' => $obj->email,
+    				'firstname' => $obj->firstname,
+    				'lastname' => $obj->lastname,
+    				'is_admin' => $obj->is_admin
     				));
     		}
     		else {

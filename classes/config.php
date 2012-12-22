@@ -5,8 +5,8 @@
  */
 
 $database = array(
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => 'root',
-	'dbname' => 'doodiro'
+	'hostname' => 'mysql',
+	'username' => 'foleybov_web',
+	'password' => 'foleybov_mysql',
+	'dbname' => 'foleybov_doodiro'
 	);

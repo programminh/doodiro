@@ -77,7 +77,9 @@ $c = count($event_dates);
 
 <div class="container">
 	<div class="row">
-        <h1><?php echo $event->name ?></h1>
+    <h1><?php echo $event->name ?> (<?php echo $event->duration ?> heure<?php echo $event->duration > 1 ? "s" : "" ?>)</h1>
+    <h3>Organisé par: <?php echo $event->organizer_name ?></h3>
+
         <form id="new_event_form" class="form-horizontal" method="post" action="">
 	        <legend>Mes disponibilités</legend>
 
