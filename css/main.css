@@ -107,22 +107,37 @@ ul.sticky_notes li a:hover,ul.sticky_notes li a:focus {
 	margin-bottom : 5px;
 }
 
-.changeable {
-	text-align: center;
+.changeable:hover {
+    cursor:pointer;
 }
 .no-reservation {
     background-color: #ddd;
+    width:32px;
 }
-
 .going {
+    width:32px;
     background: #8f8;
-
+	text-align: center;
 }
 
 .not-going {
+    width:32px;
     background: #f88;
+	text-align: center;
 }
 
 .not-sure {
+    width:32px;
     background-color: #88f;
+	text-align: center;
+}
+
+.reservation-date {
+    font-weight: normal;
+    font-size: 0.9em;
+    padding:4px 8px;
+}
+.reservation-hour {
+    font-weight: normal;
+    font-size: 0.9em;
 }

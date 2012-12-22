@@ -27,7 +27,10 @@ function display_square($reservations, $event_date_id, $date, $hour, $input_fiel
         $icon = "";
         $value = -1;      
     }
-    return "<td class=\"changeable {$td_class}\">" .
+    if ($input_field) {
+        $td_class = "changeable " . $td_class;
+    }
+    return "<td class=\"{$td_class}\">" .
         "<i class=\"$icon\"></i>" .
         ($input_field ? "<input type=\"hidden\" name=\"$input_name\" value=\"$value\" />" : "") .
         "</td>";
@@ -82,14 +85,14 @@ $c = count($event_dates);
                 <tr>
                     <th>&nbsp;</th>
                     <?php for ($h = 0; $h < 24; $h++): ?>
-                    <th>
-                        <?php printf("%02dh00", $h) ?>
+                    <th class="reservation-hour">
+                        <?php printf("%2dh", $h) ?>
                     </th>
                     <?php endfor ?>
 
                     <?php for ($i = 0; $i < $c; $i++): ?>
                     <tr>
-                        <th><?php echo $event_dates[$i]["date"] ?></th>
+                        <th class="reservation-date"><?php echo $event_dates[$i]["date"] ?></th>
                         <?php for ($h = 0; $h < 24; $h++): ?>
                             <?php if ($h >= $event_dates[$i]["start_hour"] && $h < $event_dates[$i]["end_hour"]): ?>
                             <?php echo display_square($my_reservations, $event_dates[$i]['id'], $event_dates[$i]["date"], $h, TRUE) ?>
@@ -119,14 +122,14 @@ $c = count($event_dates);
             <tr>
                 <th>&nbsp;</th>
                 <?php for ($h = 0; $h < 24; $h++): ?>
-                <th>
-                    <?php printf("%02dh00", $h) ?>
+                <th class="reservation-hour">
+                    <?php printf("%2dh", $h) ?>
                 </th>
                 <?php endfor ?>
 
                 <?php for ($i = 0; $i < $c; $i++): ?>
                 <tr>
-                    <th><?php echo $event_dates[$i]["date"] ?></th>
+                    <th class="reservation-date"><?php echo $event_dates[$i]["date"] ?></th>
                     <?php for ($h = 0; $h < 24; $h++): ?>
                         <?php if ($h >= $event_dates[$i]["start_hour"] && $h < $event_dates[$i]["end_hour"]): ?>
                         <?php echo display_square($reservations, $event_dates[$i]["id"], $event_dates[$i]["date"], $h, FALSE) ?>
