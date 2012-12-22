@@ -187,7 +187,7 @@ $all_users = __json_encode(User::find_all_names($user->id));
 			var thisDate = { date: date, fromTime: fromTime, toTime: toTime };
 
 			if(! date || ! fromTime || ! toTime) return alert('La date et les heures ne peuvent être vides');
-			if(new Date(date) < new Date()) return alert('La date ne peut être dans le passé');
+			if(new Date(date + "00:00:00") < new Date()) return alert('La date ne peut être dans le passé');
 			if(toTime < fromTime) return alert('L\'heure de fin ne peut être plus petit que l\'heure du début');
 
 			dates.push(thisDate);
